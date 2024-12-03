@@ -1,7 +1,21 @@
 // Container, in dem die Pokémon-Karten hinzugefügt werden sollen
 const pokemonContainer = document.getElementById('pokemon-container');
+let searchFlag = false;
+let searched;
+//input
+const pokemonSearch = document.getElementById("pokesearch")
+pokemonSearch.addEventListener("input", function () {
 
-//input 
+    if (pokemonSearch.value === "") {
+        searchFlag = false;
+    }
+    else{
+        searchFlag = true;
+    }
+    console.log(pokemonSearch.value);
+    pokemonContainer.innerHTML="";
+    displayPokemons(pokemonSearch.value); 
+})
 
 // Funktion, um die Daten eines einzelnen Pokémon von der API abzurufen
 async function fetchPokemon(id) {
@@ -22,7 +36,7 @@ async function fetchPokemon(id) {
 }
 
 async function fetchByName(pokemonName) {
-    if (pokemonName === undefined) {
+    if (pokemonName === "") {
         return
     }
     try {
@@ -37,29 +51,16 @@ async function fetchByName(pokemonName) {
     }
 }
 
-async function fetchByName(pokemonId) {
-    if (pokemonName === undefined) {
-        return
-    }
-    try {
-        // Abruf der Pokémon-Daten anhand der ID
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
-        const pokemon = await response.json(); // Umwandlung der Antwort in ein JSON-Objekt
-        // Die Daten des Pokémon mit angegebener Id wird zurückgegeben
-        return pokemon;
-    } catch (error) {
-        // Fehlerbehandlung, falls die API-Anfrage fehlschlägt
-        console.error('Error fetching pokemonId', error);
-    }
-}
-
 // YAKUP Kalkan
 // Funktion, um Pokémon-Karten anzuzeigen
-async function displayPokemons() {
-    // console.log(pokemonName)
+async function displayPokemons(searched) {
+    console.log(searched)
     
+    if(searchFlag){
+        console.log(searchFlag);
         // Abrufen der Pokémon-Daten für die aktuelle ID
-        const pokemon = await fetchPokemon();
+        const pokemon = await fetchByName(searched);
+        console.log(pokemon);
         if (pokemon) {
             // Erstellen einer Karte für das Pokémon
             const pokemonCard = document.createElement('div');
@@ -175,6 +176,9 @@ async function displayPokemons() {
             // Hinzufügen der Karte zum Container
             pokemonContainer.appendChild(pokemonCard);
         }
+    }
+    else
+    {
         // Schleife, um die ersten 150 Pokémon (ID: 1 bis 150) zu durchlaufen
         for (let i = 1; i <= 150; i++) {
             // Abrufen der Pokémon-Daten für die aktuelle ID
@@ -293,6 +297,7 @@ async function displayPokemons() {
                 pokemonContainer.appendChild(pokemonCard);
             }
         }
-    
+    }
 }
-displayPokemons();
+
+displayPokemons(pokemonSearch.value);
