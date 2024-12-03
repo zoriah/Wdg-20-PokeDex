@@ -249,6 +249,7 @@ async function displayPokemons() {
             // URL des Bildes wird aus den Pokémon-Daten entnommen
             pokemonImage.src = pokemon.sprites.other.showdown.front_shiny;
             pokemonImage.alt = pokemon.name;
+            pokemonImage.classList.add('w-24', 'h-24');
 
             // Hinzufügen des Pokémon-Namens
             const pokemonName = document.createElement('h2');
@@ -282,7 +283,8 @@ async function displayPokemons() {
             pokemonContainer.appendChild(pokemonCard);
         }
     }
-
 }
+
+displayPokemons()
 
 // --- NA --- END
