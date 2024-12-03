@@ -45,7 +45,7 @@ async function fetchPokemon(searched) {
     }
 }
 
-// YAKUP 
+// YAKUP Kalkan
 // Funktion, um Pokémon-Karten anzuzeigen
 async function displayPokemons() {
     // console.log(pokemonName)
