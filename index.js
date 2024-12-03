@@ -45,6 +45,7 @@ async function fetchPokemon(searched) {
     }
 }
 
+// YAKUP 
 // Funktion, um Pokémon-Karten anzuzeigen
 async function displayPokemons() {
     // console.log(pokemonName)
@@ -58,24 +59,96 @@ async function displayPokemons() {
             'bg-white',
             'rounded-lg',
             'shadow-lg',
+            'border-2',
             'p-4',
             'flex',
             'flex-col',
             'items-center',
             'text-center'
         );
+        pokemonCard.style.aspectRatio = "3/4";
+
+        const pokemonCardHeader = document.createElement('div');
+        pokemonCardHeader.classList.add(
+            'w-full',
+            'h-10',
+            'flex',
+            'justify-end',
+            'border',
+            'border-gray-300',
+            'mb-2',
+            'pr-2',
+            'rounded-lg'
+        );
+
+        // favorite Button
+        const favoriteButton = document.createElement('button');
+        favoriteButton.classList.add(
+            "top-2",
+            "right-2",
+            "border-0",
+            "bg-transparent",
+            "text-2xl",
+            "cursor-pointer",
+            "text-gray-500"
+        );
+        favoriteButton.textContent = "★";
+
+
+
+        // favorite Button click event
+        favoriteButton.addEventListener('click', () => {
+            if (favoriteButton.style.color === "gold") {
+                favoriteButton.style.color = "gray";
+                // call function to remove it into the favorites list
+            } else {
+                favoriteButton.style.color = "gold";
+                // call function to add it into the favorites list
+            }
+        });
+
+        pokemonCardHeader.appendChild(favoriteButton);
+
+        const pokemonCardImage = document.createElement('div');
+        pokemonCardImage.classList.add(
+            'w-full',
+            'h-1/2',
+            'bg-white',
+            'rounded-lg',
+            'border-2',
+            'p-10',
+            'flex',
+            'flex-col',
+            'justify-center',
+            'text-center',
+        );
+
 
         // Hinzufügen des Pokémon-Bildes
         const pokemonImage = document.createElement('img');
         // URL des Bildes wird aus den Pokémon-Daten entnommen
         pokemonImage.src = pokemon.sprites.other.showdown.front_shiny;
         pokemonImage.alt = pokemon.name;
+        pokemonImage.classList.add('w-24', 'h-24');
+
+        pokemonCardImage.appendChild(pokemonImage);
+
 
         // Hinzufügen des Pokémon-Namens
         const pokemonName = document.createElement('h2');
         pokemonName.textContent = pokemon.name; // Name des Pokémon
         pokemonName.classList.add('text-xl', 'font-bold', 'mb-2'); // Styling für den Namen
 
+        const pokemonCardInfo = document.createElement('div');
+        pokemonCardInfo.classList.add(
+            'w-full',
+            'h-20',
+            'flex',
+            'justify-center',
+            'border',
+            'border-gray-300',
+            'rounded-lg'
+        );
         // Hinzufügen von Informationen wie ID und Typ
         const pokemonInfo = document.createElement('p');
         pokemonInfo.textContent = `ID: ${pokemon.id} | Type: ${pokemon.types
@@ -83,10 +156,13 @@ async function displayPokemons() {
             .join(', ') // Typen in eine durch Kommas getrennte Liste umwandeln
             .toUpperCase()}`; // Typen in Großbuchstaben konvertieren
 
+        pokemonCardInfo.appendChild(pokemonInfo)
+
         // Zusammenfügen der einzelnen Teile zur vollständigen Karte
-        pokemonCard.appendChild(pokemonImage);
+        pokemonCard.appendChild(pokemonCardHeader);
+        pokemonCard.appendChild(pokemonCardImage);
         pokemonCard.appendChild(pokemonName);
-        pokemonCard.appendChild(pokemonInfo);
+        pokemonCard.appendChild(pokemonCardInfo);
 
         // Hinzufügen der Karte zum Container
         pokemonContainer.appendChild(pokemonCard);
@@ -104,12 +180,69 @@ async function displayPokemons() {
                 'bg-white',
                 'rounded-lg',
                 'shadow-lg',
+                'border-2',
                 'p-4',
                 'flex',
                 'flex-col',
                 'items-center',
                 'text-center'
             );
+            pokemonCard.style.aspectRatio = "3/4";
+
+            const pokemonCardHeader = document.createElement('div');
+            pokemonCardHeader.classList.add(
+                'w-full',
+                'h-10',
+                'flex',
+                'justify-end',
+                'border',
+                'border-gray-300',
+                'mb-2',
+                'pr-2',
+                'rounded-lg'
+            );
+
+            // favorite Button
+            const favoriteButton = document.createElement('button');
+            favoriteButton.classList.add(
+                "top-2",
+                "right-2",
+                "border-0",
+                "bg-transparent",
+                "text-2xl",
+                "cursor-pointer",
+                "text-gray-500"
+            );
+            favoriteButton.textContent = "★";
+
+            // favorite Button click event
+            favoriteButton.addEventListener('click', () => {
+                if (favoriteButton.style.color === "gold") {
+                    favoriteButton.style.color = "gray";
+                    // call function to remove it into the favorites list
+                } else {
+                    favoriteButton.style.color = "gold";
+                    // call function to add it into the favorites list
+                }
+            });
+
+            pokemonCardHeader.appendChild(favoriteButton);
+
+
+            const pokemonCardImage = document.createElement('div');
+            pokemonCardImage.classList.add(
+                'w-full',
+                'h-1/2',
+                'bg-white',
+                'rounded-lg',
+                'border-2',
+                'p-10',
+                'flex',
+                'flex-col',
+                'justify-center',
+                'text-center',
+            );
+
 
             // Hinzufügen des Pokémon-Bildes
             const pokemonImage = document.createElement('img');
@@ -120,8 +253,17 @@ async function displayPokemons() {
             // Hinzufügen des Pokémon-Namens
             const pokemonName = document.createElement('h2');
             pokemonName.textContent = pokemon.name; // Name des Pokémon
-            pokemonName.classList.add('text-xl', 'font-bold', 'mb-2'); // Styling für den Namen
-
+            pokemonName.classList.add('text-xl', 'font-bold', 'mb-1'); // Styling für den Namen
+            const pokemonCardInfo = document.createElement('div');
+            pokemonCardInfo.classList.add(
+                'w-full',
+                'h-20',
+                'flex',
+                'justify-center',
+                'border',
+                'border-gray-300',
+                'rounded-lg'
+            );
             // Hinzufügen von Informationen wie ID und Typ
             const pokemonInfo = document.createElement('p');
             pokemonInfo.textContent = `ID: ${pokemon.id} | Type: ${pokemon.types
@@ -129,25 +271,18 @@ async function displayPokemons() {
                 .join(', ') // Typen in eine durch Kommas getrennte Liste umwandeln
                 .toUpperCase()}`; // Typen in Großbuchstaben konvertieren
 
+            pokemonCardInfo.appendChild(pokemonInfo)
             // Zusammenfügen der einzelnen Teile zur vollständigen Karte
-            pokemonCard.appendChild(pokemonImage);
+            pokemonCard.appendChild(pokemonCardHeader);
+            pokemonCard.appendChild(pokemonCardImage);
             pokemonCard.appendChild(pokemonName);
-            pokemonCard.appendChild(pokemonInfo);
+            pokemonCard.appendChild(pokemonCardInfo);
 
             // Hinzufügen der Karte zum Container
             pokemonContainer.appendChild(pokemonCard);
         }
     }
-}
 
-switch (searched) {
-    case "":
-        displayPokemons();
-        break;
-
-    default:
-        displayPokemons()
-        break;
 }
 
 // --- NA --- END
