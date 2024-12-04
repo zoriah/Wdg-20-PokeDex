@@ -23,6 +23,36 @@ async function fetchPokemon(id) {
 const pokemons = favoritePokemons.map(pokemon => fetchPokemon(pokemon))
 console.log("Noa: " + pokemons)
 
+//Naci
+function removeItemFromFavorites(pokemonName) {
+    let favorites = localStorage.getItem('favorites');
+
+    favorites = favorites ? JSON.parse(favorites) : [];
+
+    if (favorites.includes(pokemonName)) {
+        favorites = favorites.filter(x => x != pokemonName);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        console.log(`${pokemonName}was deleted`);
+    }
+    else {
+        console.log('it does not exist');
+    }
+}
+//Bahman
+function addToFavorites(pokemonName) {
+
+    let favorites = localStorage.getItem('favorites');
+
+    favorites = favorites ? JSON.parse(favorites) : [];
+
+    if (!favorites.includes(pokemonName)) {
+        favorites.push(pokemonName); // Name zur Liste hinzufügen
+        localStorage.setItem('favorites', JSON.stringify(favorites)); // Favoritenliste speichern
+    } else {
+        console.log(`Pokémon mit dem Namen ${pokemonName} ist bereits in der Favoritenliste.`);
+    }
+}
+
 async function displayPokemons() {
 
     // Schleife, um die favoritePokemons auszulesen
@@ -68,6 +98,7 @@ async function displayPokemons() {
             "text-gray-500"
         );
         favoriteButton.textContent = "★";
+        favoriteButton.style.color = "gold";
 
         // favorite Button click event
         favoriteButton.addEventListener('click', () => {
@@ -144,6 +175,7 @@ async function displayPokemons() {
                     "text-gray-500"
                 );
                 favoriteButton.textContent = "★";
+                favoriteButton.style.color = "gold";
 
                 // favorite Button click event
                 favoriteButton.addEventListener('click', () => {
