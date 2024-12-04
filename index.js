@@ -50,6 +50,35 @@ async function fetchByName(pokemonName) {
         console.error('Error fetching pokemonName', error);
     }
 }
+//Naci
+function removeItemFromFavorites(pokemonName){
+    let favorites = localStorage.getItem('favorites');
+
+    favorites = favorites ? JSON.parse(favorites) : [];
+
+    if (favorites.includes(pokemonName)) {
+        favorites = favorites.filter(x => x != pokemonName);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        console.log(`${pokemonName}was deleted`);
+    }
+    else{
+        console.log('it does not exist');
+    }
+}
+//Bahman
+function addToFavorites(pokemonName) {
+
+    let favorites = localStorage.getItem('favorites');
+
+    favorites = favorites ? JSON.parse(favorites) : [];
+
+    if (!favorites.includes(pokemonName)) {
+        favorites.push(pokemonName); // Name zur Liste hinzufügen
+        localStorage.setItem('favorites', JSON.stringify(favorites)); // Favoritenliste speichern
+    } else {
+        console.log(`Pokémon mit dem Namen ${pokemonName} ist bereits in der Favoritenliste.`);
+    }
+}
 
 // YAKUP Kalkan
 // Funktion, um Pokémon-Karten anzuzeigen
@@ -232,9 +261,11 @@ async function displayPokemons(searched) {
                     if (favoriteButton.style.color === "gold") {
                         favoriteButton.style.color = "gray";
                         // call function to remove it into the favorites list
+                        removeItemFromFavorites(pokemon.name);
                     } else {
                         favoriteButton.style.color = "gold";
                         // call function to add it into the favorites list
+                        addToFavorites(pokemon.name);
                     }
                 });
 
