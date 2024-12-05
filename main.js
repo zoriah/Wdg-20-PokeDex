@@ -1,6 +1,6 @@
 // Container, in dem die Pokémon-Karten hinzugefügt werden sollen
 const pokemonContainer = document.getElementById('pokemon-container')
-
+const favoritePokemons = JSON.parse(localStorage.getItem('favorites'))
 
 let searchFlag = false;
 let searched;
@@ -45,6 +45,7 @@ async function fetchByName(pokemonName) {
         return
     }
     try {
+        console.log(`test for ID: ${pokemonName}`);
         // Abruf der Pokémon-Daten anhand der ID
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
         const pokemon = await response.json(); // Umwandlung der Antwort in ein JSON-Objekt
@@ -120,7 +121,11 @@ function pokemonCardCreator(pokemon) {
     const favoriteButton = document.createElement('button');
     favoriteButton.classList.add("bg-transparent", "text-4xl", "cursor-pointer", "text-gray-500");
     favoriteButton.textContent = "★";
-
+    
+    if(favoritePokemons.includes(pokemon.name))
+    {
+        favoriteButton.style.color = "gold";
+    }
     // favorite Button click event
     favoriteButton.addEventListener('click', () => {
         if (favoriteButton.style.color === "gold") {
