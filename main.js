@@ -20,8 +20,17 @@ pokemonSearch.addEventListener("input", function () {
     }
     console.log(pokemonSearch.value);
     pokemonContainer.innerHTML = "";
-    displayPokemons(pokemonSearch.value);
+    // displayPokemons(pokemonSearch.value);
 })
+
+const searchBtn = document.getElementById('searchBtn')
+searchBtn.onclick = y => {
+    console.log("btn geklicked")
+    console.log(pokemonSearch.value)
+    displayPokemons(pokemonSearch.value)
+    searchFlag = false
+}
+
 
 // Funktion, um die Daten eines einzelnen Pokémon von der API abzurufen
 async function fetchPokemon(id) {
@@ -121,9 +130,8 @@ function pokemonCardCreator(pokemon) {
     const favoriteButton = document.createElement('button');
     favoriteButton.classList.add("bg-transparent", "text-4xl", "cursor-pointer", "text-gray-500");
     favoriteButton.textContent = "★";
-    
-    if(favoritePokemons.includes(pokemon.name))
-    {
+
+    if (favoritePokemons.includes(pokemon.name)) {
         favoriteButton.style.color = "gold";
     }
     // favorite Button click event
