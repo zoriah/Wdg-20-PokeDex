@@ -1,9 +1,15 @@
 // Container, in dem die Pokémon-Karten hinzugefügt werden sollen
-const pokemonContainer = document.getElementById('pokemon-container');
+const pokemonContainer = document.getElementById('pokemon-container')
+
+
 let searchFlag = false;
 let searched;
+
+console.log(typeof document.getElementById("pokesearch").value === "number")
+
 //input
 const pokemonSearch = document.getElementById("pokesearch")
+
 pokemonSearch.addEventListener("input", function () {
 
     if (pokemonSearch.value === "") {
@@ -79,7 +85,7 @@ function addToFavorites(pokemonName) {
     }
 }
 
-function pokemonCardCreator(pokemon){
+function pokemonCardCreator(pokemon) {
     const pokemonCard = document.createElement('div');
     pokemonCard.classList.add('bg-white', 'rounded-lg', 'shadow-lg', 'border-2', 'p-4', 'text-center', 'flex', 'flex-col');
     pokemonCard.style.width = "280px";
@@ -103,13 +109,13 @@ function pokemonCardCreator(pokemon){
     header.appendChild(pokemonHP);
 
     const pokeTypeUndfavorite = document.createElement('div');
-    pokeTypeUndfavorite.classList.add('w-full','h-10','flex', 'items-center', 'justify-between');
-    
+    pokeTypeUndfavorite.classList.add('w-full', 'h-10', 'flex', 'items-center', 'justify-between');
+
     // Type 
     const typeDiv = document.createElement('p');
     const types = pokemon.types.map(type => type.type.name).join(', ').toUpperCase();
     typeDiv.textContent = `Type: ${types}`;
-    typeDiv.classList.add('text-center','text-gray-600');
+    typeDiv.classList.add('text-center', 'text-gray-600');
 
     const favoriteButton = document.createElement('button');
     favoriteButton.classList.add("bg-transparent", "text-4xl", "cursor-pointer", "text-gray-500");
@@ -133,7 +139,7 @@ function pokemonCardCreator(pokemon){
 
     // image
     const imageDiv = document.createElement('div');
-    imageDiv.classList.add('w-full', 'h-40','flex', 'justify-center', 'mb-4');
+    imageDiv.classList.add('w-full', 'h-40', 'flex', 'justify-center', 'mb-4');
     const pokemonImage = document.createElement('img');
     //pokemonImage.src = pokemon.sprites.other['official-artwork'].front_default;
     pokemonImage.src = pokemon.sprites.other.showdown.front_shiny;
@@ -184,7 +190,7 @@ async function displayPokemons(searched) {
         // Abrufen der Pokémon-Daten für die aktuelle ID
         const pokemon = await fetchByName(searched);
         console.log(pokemon);
-        if (pokemon) {  
+        if (pokemon) {
             pokemonContainer.appendChild(pokemonCardCreator(pokemon));
         }
     }
@@ -203,4 +209,4 @@ async function displayPokemons(searched) {
     }
 }
 
-displayPokemons(pokemonSearch.value);
+displayPokemons(pokemonSearch);
