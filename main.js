@@ -1,6 +1,8 @@
 // Container, in dem die Pokémon-Karten hinzugefügt werden sollen
 const pokemonContainer = document.getElementById('pokemon-container')
-const favoritePokemons = JSON.parse(localStorage.getItem('favorites'))
+// const favoritePokemons = JSON.parse(localStorage.getItem('favorites')) || []
+
+// Im localStorage sich befindende Pmsters
 
 let searchFlag = false;
 let searched;
@@ -97,6 +99,8 @@ function addToFavorites(pokemonName) {
 }
 
 function pokemonCardCreator(pokemon) {
+    const currentPokemons = JSON.parse(localStorage.getItem('favorites')) || []
+
     const pokemonCard = document.createElement('div');
     pokemonCard.classList.add('bg-white', 'rounded-lg', 'shadow-lg', 'border-2', 'p-4', 'text-center', 'flex', 'flex-col');
     pokemonCard.style.width = "280px";
@@ -132,9 +136,10 @@ function pokemonCardCreator(pokemon) {
     favoriteButton.classList.add("bg-transparent", "text-4xl", "cursor-pointer", "text-gray-500");
     favoriteButton.textContent = "★";
 
-    if (favoritePokemons.includes(pokemon.name)) {
+    if (currentPokemons.includes(pokemon.name)) {
         favoriteButton.style.color = "gold";
     }
+
     // favorite Button click event
     favoriteButton.addEventListener('click', () => {
         if (favoriteButton.style.color === "gold") {
@@ -200,7 +205,7 @@ async function displayPokemons(searched) {
     console.log(searched)
 
     if (searchFlag) {
-        console.log(searchFlag);
+        // console.log(searchFlag);
         // Abrufen der Pokémon-Daten für die aktuelle ID
         const pokemon = await fetchByName(searched);
         console.log(pokemon);
