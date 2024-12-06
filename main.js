@@ -14,6 +14,7 @@ pokemonSearch.addEventListener("input", function () {
 
     if (pokemonSearch.value === "") {
         searchFlag = false;
+        displayPokemons()
     }
     else {
         searchFlag = true;
