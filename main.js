@@ -5,7 +5,7 @@ const favoritePokemons = JSON.parse(localStorage.getItem('favorites'))
 let searchFlag = false;
 let searched;
 
-console.log(typeof document.getElementById("pokesearch").value === "number")
+// console.log(typeof document.getElementById("pokesearch").value === "number")
 
 //input
 const pokemonSearch = document.getElementById("pokesearch")
@@ -14,6 +14,7 @@ pokemonSearch.addEventListener("input", function () {
 
     if (pokemonSearch.value === "") {
         searchFlag = false;
+        // displayPokemons()
     }
     else {
         searchFlag = true;
@@ -24,6 +25,7 @@ pokemonSearch.addEventListener("input", function () {
 })
 
 const searchBtn = document.getElementById('searchBtn')
+searchBtn.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded")
 searchBtn.onclick = y => {
     console.log("btn geklicked")
     console.log(pokemonSearch.value)
