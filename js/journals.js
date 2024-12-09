@@ -20,8 +20,6 @@ async function fetchPokemon(id) {
     }
 }
 
-const pokemons = favoritePokemons.map(pokemon => fetchPokemon(pokemon))
-console.log("Noa: " + pokemons)
 
 //Naci
 function removeItemFromFavorites(pokemonName) {
@@ -29,15 +27,11 @@ function removeItemFromFavorites(pokemonName) {
 
     favorites = favorites ? JSON.parse(favorites) : [];
 
-    if (favorites.includes(pokemonName)) {
-        favorites = favorites.filter(x => x != pokemonName);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        console.log(`${pokemonName}was deleted`);
-    }
-    else {
-        console.log('it does not exist');
-    }
+    const updatedFavorites = favorites.filter(items => items.name !== pokemonName);
+
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
 }
+
 //Bahman
 function addToFavorites(pokemonName) {
 
@@ -45,18 +39,43 @@ function addToFavorites(pokemonName) {
 
     favorites = favorites ? JSON.parse(favorites) : [];
 
-    if (!favorites.includes(pokemonName)) {
-        favorites.push(pokemonName); // Name zur Liste hinzufügen
-        localStorage.setItem('favorites', JSON.stringify(favorites)); // Favoritenliste speichern
-    } else {
+    const pokemonWithNote = {
+        name:pokemonName, 
+        note: "", 
+        noteFlag:false
+    };
+    const isFavorited = favorites.some(items => items.name === pokemonName);
+    if(!isFavorited){
+        favorites.push(pokemonWithNote);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+    else {
         console.log(`Pokémon mit dem Namen ${pokemonName} ist bereits in der Favoritenliste.`);
     }
 }
 
+function getPokemonByName(pokemonName) {
+    const favorites =JSON.parse(localStorage.getItem('favorites')) || {};
+
+    const pokemon = favorites.find(fav => fav.name === pokemonName);
+  
+    return pokemon || null; 
+  }
+
+  function addNoteToFavorite(selectedPokemon) {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || {};
+  
+    const updatedFavorites = favorites.map(fav => 
+      fav.name === selectedPokemon.name ? selectedPokemon : fav
+    );
+  
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+  }
+
 function pokemonCardCreator(pokemon){
     const pokemonCard = document.createElement('div');
     pokemonCard.classList.add('bg-white', 'rounded-lg', 'shadow-lg', 'border-2', 'p-4', 'text-center', 'flex', 'flex-col');
-    pokemonCard.style.width = "280px";
+    pokemonCard.style.width = "300px";
 
     // Header: Pokémon adı ve HP
     const header = document.createElement('div');
@@ -138,6 +157,54 @@ function pokemonCardCreator(pokemon){
     dimensionsDiv.classList.add('text-sm', 'mb-4');
     dimensionsDiv.textContent = `Height: ${(pokemon.height / 10).toFixed(1)} m | Weight: ${(pokemon.weight / 10).toFixed(1)} kg`;
 
+    // ----- Personal note section
+    const noteDiv = document.createElement('div');
+    noteDiv.classList.add('text-sm', 'mb-4', 'text-left');
+
+    // Load favorites from localStorage
+    const favoritesData = JSON.parse(localStorage.getItem('favorites')) || {};
+
+    selectedPokemon = getPokemonByName(pokemon.name);
+    console.log(`> 168 selected ${selectedPokemon.name}`);
+    if (!selectedPokemon.noteFlag) {
+        // Show input if no note exists
+        const noteLabel = document.createElement('label');
+        noteLabel.textContent = "Add a Note:";
+        noteLabel.classList.add('block', 'font-semibold', 'mb-1');
+
+        const noteInput = document.createElement('textarea');
+        noteInput.classList.add('w-full', 'border', 'rounded', 'p-2', 'text-sm');
+        noteInput.placeholder = "Write your personal note here...";
+        noteInput.style.height = "60px";
+
+        const saveNoteButton = document.createElement('button');
+        saveNoteButton.textContent = "Save Note";
+        saveNoteButton.classList.add('bg-blue-500', 'text-white', 'px-3', 'py-1', 'rounded', 'mt-2', 'hover:bg-blue-700', 'text-sm');
+
+        // Save note on button click
+        saveNoteButton.addEventListener('click', () => {
+            const note = noteInput.value.trim();
+            if (note) {
+                selectedPokemon = getPokemonByName(pokemon.name);
+                // Update localStorage with the new note
+                selectedPokemon.note = note;
+                selectedPokemon.noteFlag = true;
+                addNoteToFavorite(selectedPokemon);
+
+                // Show the saved note
+                noteDiv.innerHTML = `<p><strong>Note:</strong> ${note}</p>`;
+            } else {
+                alert("Please enter a valid note.");
+            }
+        });
+
+        noteDiv.appendChild(noteLabel);
+        noteDiv.appendChild(noteInput);
+        noteDiv.appendChild(saveNoteButton);
+    } else {
+        // Show saved note if it exists
+        noteDiv.innerHTML = `<p><strong>Note:</strong> ${selectedPokemon.note}</p>`;
+    }
 
     pokemonCard.appendChild(header);
     pokemonCard.appendChild(pokeTypeUndfavorite)
@@ -145,12 +212,22 @@ function pokemonCardCreator(pokemon){
     pokemonCard.appendChild(statsDiv);
     pokemonCard.appendChild(dimensionsDiv);
     pokemonCard.appendChild(abilitiesDiv);
+    // Append to card
+    pokemonCard.appendChild(noteDiv);
 
     return pokemonCard;
 }
 
-async function displayPokemons() {
+    // Save Pokémon to favorites (if not already there)
+    const saveToFavorites = () => {
+        if (!favoritesData[pokemon.name]) {
+            favoritesData[pokemon.name] = { name: pokemon.name, note: null, hasNote: false };
+            localStorage.setItem('favorites', JSON.stringify(favoritesData));
+        }
+    };
 
+async function displayPokemons() {
+    const pokemons = favoritePokemons.map(pokemon => fetchPokemon(pokemon.name))
     // Schleife, um die favoritePokemons auszulesen
     pokemons.forEach(pokemon => {
 
