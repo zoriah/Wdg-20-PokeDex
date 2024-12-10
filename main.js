@@ -1,13 +1,11 @@
 // Container, in dem die Pokémon-Karten hinzugefügt werden sollen
 const pokemonContainer = document.getElementById('pokemon-container')
-// const favoritePokemons = JSON.parse(localStorage.getItem('favorites')) || []
-
-// Im localStorage sich befindende Pmsters
-
+//const favoritePokemons = JSON.parse(localStorage.getItem('favorites'))
+const favoritesData = JSON.parse(localStorage.getItem('favorites')) || {};
 let searchFlag = false;
 let searched;
-
 // console.log(typeof document.getElementById("pokesearch").value === "number")
+
 
 //input
 const pokemonSearch = document.getElementById("pokesearch")
@@ -16,18 +14,21 @@ pokemonSearch.addEventListener("input", function () {
 
     if (pokemonSearch.value === "") {
         searchFlag = false;
-        // displayPokemons()
+        //displayPokemons()
+
     }
     else {
         searchFlag = true;
     }
     console.log(pokemonSearch.value);
     pokemonContainer.innerHTML = "";
-    // displayPokemons(pokemonSearch.value);
+    //displayPokemons(pokemonSearch.value);
 })
 
 const searchBtn = document.getElementById('searchBtn')
+
 searchBtn.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded")
+
 searchBtn.onclick = y => {
     console.log("btn geklicked")
     console.log(pokemonSearch.value)
@@ -68,21 +69,27 @@ async function fetchByName(pokemonName) {
         console.error('Error fetching pokemonName', error);
     }
 }
+
 //Naci
 function removeItemFromFavorites(pokemonName) {
     let favorites = localStorage.getItem('favorites');
 
     favorites = favorites ? JSON.parse(favorites) : [];
 
-    if (favorites.includes(pokemonName)) {
+    const updatedFavorites = favorites.filter(items => items.name !== pokemonName);
+
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+
+    /*if (favorites.includes(pokemonName)) {
         favorites = favorites.filter(x => x != pokemonName);
         localStorage.setItem('favorites', JSON.stringify(favorites));
         console.log(`${pokemonName}was deleted`);
     }
     else {
         console.log('it does not exist');
-    }
+    }*/
 }
+
 //Bahman
 function addToFavorites(pokemonName) {
 
@@ -90,20 +97,32 @@ function addToFavorites(pokemonName) {
 
     favorites = favorites ? JSON.parse(favorites) : [];
 
-    if (!favorites.includes(pokemonName)) {
+    const pokemonWithNote = {
+        name:pokemonName, 
+        note: "", 
+        noteFlag:false
+    };
+    const isFavorited = favorites.some(items => items.name === pokemonName);
+    if(!isFavorited){
+        favorites.push(pokemonWithNote);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+    else {
+        console.log(`Pokémon mit dem Namen ${pokemonName} ist bereits in der Favoritenliste.`);
+    }
+ 
+    /*if (!favorites.includes(pokemonName)) {
         favorites.push(pokemonName); // Name zur Liste hinzufügen
         localStorage.setItem('favorites', JSON.stringify(favorites)); // Favoritenliste speichern
     } else {
         console.log(`Pokémon mit dem Namen ${pokemonName} ist bereits in der Favoritenliste.`);
-    }
+    }*/
 }
 
 function pokemonCardCreator(pokemon) {
-    const currentPokemons = JSON.parse(localStorage.getItem('favorites')) || []
-
     const pokemonCard = document.createElement('div');
     pokemonCard.classList.add('bg-white', 'rounded-lg', 'shadow-lg', 'border-2', 'p-4', 'text-center', 'flex', 'flex-col');
-    pokemonCard.style.width = "280px";
+    pokemonCard.style.width = "300px";
 
     // Header: Pokémon adı ve HP
     const header = document.createElement('div');
@@ -135,11 +154,14 @@ function pokemonCardCreator(pokemon) {
     const favoriteButton = document.createElement('button');
     favoriteButton.classList.add("bg-transparent", "text-4xl", "cursor-pointer", "text-gray-500");
     favoriteButton.textContent = "★";
-
-    if (currentPokemons.includes(pokemon.name)) {
+    
+    const isFavorited = Array.isArray(favoritesData) 
+    ? favoritesData.some(item => item.name === pokemon.name) 
+    : false;
+    if(isFavorited){
         favoriteButton.style.color = "gold";
     }
-
+    
     // favorite Button click event
     favoriteButton.addEventListener('click', () => {
         if (favoriteButton.style.color === "gold") {
@@ -205,7 +227,7 @@ async function displayPokemons(searched) {
     console.log(searched)
 
     if (searchFlag) {
-        // console.log(searchFlag);
+        console.log(searchFlag);
         // Abrufen der Pokémon-Daten für die aktuelle ID
         const pokemon = await fetchByName(searched);
         console.log(pokemon);
